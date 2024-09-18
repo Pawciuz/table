@@ -1,0 +1,10 @@
+<div class="p-5">
+  <mat-form-field appearance="fill">
+    <mat-label>{{ data.columnKey }}</mat-label>
+    <input matInput [type]="data.columnKey ==='position' ? 'number':'text'" [(ngModel)]="data.value" (keydown.enter)="submit()"/>
+  </mat-form-field>
+  <div class="button-group">
+    <button mat-button (click)="submit()">Submit</button>
+    <button mat-button (click)="close()">Cancel</button>
+  </div>
+</div>

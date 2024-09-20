@@ -4,10 +4,9 @@
   </mat-form-field>
 </div>
 
-<!-- Flex container to hold the table and paginator -->
 <div class="flex flex-col w-full">
-  <!-- Scrollable container using cdk-virtual-scroll-viewport -->
-  <cdk-virtual-scroll-viewport itemSize="48" class="w-full min-h-[320px] overflow-auto bg-[--mat-table-background-color]">
+  <cdk-virtual-scroll-viewport itemSize="48"
+                               class="w-full min-h-[320px] overflow-auto bg-[--mat-table-background-color]">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <ng-container *ngFor="let column of columns; let i = index">
         <ng-container [matColumnDef]="column.key">
@@ -16,6 +15,7 @@
               class="hover:bg-slate-700 cursor-pointer w-[25%] overflow-hidden">
             {{ element[column.key] }}
           </td>
+
         </ng-container>
       </ng-container>
 
@@ -29,6 +29,14 @@
           </td>
         </tr>
       }
+      @else {
+        <tr *matNoDataRow class="text-white text-center h-[200px]">
+          <td [attr.colspan]="displayedColumns.length" class="loading-row">
+            Pusto...
+          </td>
+        </tr>
+      }
+
     </table>
   </cdk-virtual-scroll-viewport>
 
@@ -36,3 +44,4 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
                  class="mat-elevation-z8 w-full" [class.invisible]="isLoading"></mat-paginator>
 </div>
+

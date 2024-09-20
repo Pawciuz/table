@@ -4,7 +4,7 @@ import {
   MatCell, MatCellDef,
   MatColumnDef,
   MatHeaderCell, MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
+  MatHeaderRow, MatHeaderRowDef, MatNoDataRow, MatRow, MatRowDef,
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
@@ -47,12 +47,13 @@ export interface ColumnDefinition {
     MatPaginator,
     NgClass,
     CdkVirtualScrollViewport,
-    CdkFixedSizeVirtualScroll
+    CdkFixedSizeVirtualScroll,
+    MatNoDataRow
   ]
 })
 export class TableComponent implements OnInit {
   @Input() columns: ColumnDefinition[] = [];
-  @Input() isLoading = false;
+  @Input() isLoading: boolean | null = false;
 
   @Input() set data(value: PeriodicElement[]) {
     this._data = this.sortByPosition(value);
@@ -81,6 +82,9 @@ export class TableComponent implements OnInit {
         if (this.dataSource) {
           this.dataSource.filter = filterValue.trim().toLowerCase();
           this.currentFilter = filterValue;
+          console.log(this.dataSource.filter)
+          console.log(this.dataSource.filteredData)
+          console.log(this.dataSource.filter && this.dataSource.filteredData.length === 0)
         }
       });
   }
@@ -106,7 +110,6 @@ export class TableComponent implements OnInit {
       return dataStr.indexOf(transformedFilter) !== -1;
     };
 
-    // Apply the current filter after initializing the data source
     if (this.currentFilter) {
       this.dataSource.filter = this.currentFilter.trim().toLowerCase();
     }
@@ -115,6 +118,7 @@ export class TableComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.filterSubject.next(filterValue);
+
   }
 
   truncate(value: string, length: number = 25): string {
@@ -135,18 +139,12 @@ export class TableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        const updatedElement = {...element, [columnKey]: result};
+        const updatedElement = { ...element, [columnKey]: result };
         this.elementUpdated.emit(updatedElement);
         const index = this._data.findIndex(e => e === element);
-        this._data = [
-          ...this._data.slice(0, index),
-          updatedElement,
-          ...this._data.slice(index + 1)
-        ];
+        this._data[index] = updatedElement;
 
-        if (columnKey === 'position') {
-          this._data = this.sortByPosition(this._data);
-        }
+        this._data = this.sortByPosition(this._data);
 
         this.initializeDataSource();
       }

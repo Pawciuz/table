@@ -1,3 +1,9 @@
-<app-table [isLoading]='loading' [columns]="columns" [data]="elements"
-           (elementUpdated)="onElementUpdated($event)"></app-table>
+<ng-container *ngIf="elements$ | async as elements">
+  <app-table
+    [isLoading]="loading$ | async"
+    [columns]="columns"
+    [data]="elements"
+    (elementUpdated)="onElementUpdated($event)">
+  </app-table>
+</ng-container>
 

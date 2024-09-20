@@ -70,15 +70,17 @@ export class TableComponent implements OnInit {
   dataSource!: MatTableDataSource<PeriodicElement>;
 
   private filterSubject = new Subject<string>();
+  currentFilter: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(public dialog: MatDialog, @Inject(PLATFORM_ID) private platformId: any) {
     this.filterSubject
-      .pipe(debounceTime(200), distinctUntilChanged())
+      .pipe(debounceTime(2000), distinctUntilChanged())
       .subscribe((filterValue) => {
         if (this.dataSource) {
           this.dataSource.filter = filterValue.trim().toLowerCase();
+          this.currentFilter = filterValue;
         }
       });
   }
@@ -91,7 +93,7 @@ export class TableComponent implements OnInit {
   private initializeDataSource() {
     this.dataSource = new MatTableDataSource(this._data);
 
-    if (this.paginator ) {
+    if (this.paginator) {
       this.dataSource.paginator = this.paginator;
       this.paginator.length = this._data.length;
     }
@@ -103,6 +105,11 @@ export class TableComponent implements OnInit {
       const transformedFilter = filter.trim().toLowerCase();
       return dataStr.indexOf(transformedFilter) !== -1;
     };
+
+    // Apply the current filter after initializing the data source
+    if (this.currentFilter) {
+      this.dataSource.filter = this.currentFilter.trim().toLowerCase();
+    }
   }
 
   applyFilter(event: Event) {

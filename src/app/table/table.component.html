@@ -1,6 +1,6 @@
 <div class="bg-[--mat-table-background-color] w-full">
   <mat-form-field subscriptSizing="dynamic" class="w-[300px] p-5">
-    <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filter" [value]="currentFilter">
   </mat-form-field>
 </div>
 

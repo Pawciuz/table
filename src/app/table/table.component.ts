@@ -12,7 +12,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {isPlatformBrowser, NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {EditTableRowComponent} from '../edit-table-row/edit-table-row.component';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatPaginator} from '@angular/material/paginator';
@@ -82,9 +82,6 @@ export class TableComponent implements OnInit {
         if (this.dataSource) {
           this.dataSource.filter = filterValue.trim().toLowerCase();
           this.currentFilter = filterValue;
-          console.log(this.dataSource.filter)
-          console.log(this.dataSource.filteredData)
-          console.log(this.dataSource.filter && this.dataSource.filteredData.length === 0)
         }
       });
   }
